@@ -25,21 +25,17 @@ wspider is **EXTREMLY** powerful and fast and is using wget2 and In many cases w
 
 ![wspider1](https://user-images.githubusercontent.com/26827453/178808318-e8a671b5-698f-4d40-b965-ed0bb6246953.gif)
 
-### wspider (full preview)
-
-![wspider1](.preview/wspider.gif)
-
-### wspider (10 thread)
+### wspider (10 threads)
 
 ![wspider_10threads](https://user-images.githubusercontent.com/26827453/178815097-e9760ddf-28f6-4313-a6d3-a98ecf4de938.gif)
 
 
-### wspider (1 thread)
+### wspider (1 threads)
 
 ![wspider_1thread](https://user-images.githubusercontent.com/26827453/178814816-d5ba5fc6-4fcc-4bef-8d35-a4123d3a3857.gif)
 
 
-### GNU/Parallel (old and slow)
+### GNU/Parallel (old and slow - using ALOT resources for nothing)
 
 Crawler is from here: https://www.gnu.org/software/parallel/man.html
 
