@@ -42,6 +42,7 @@
 #
 # - End of Header -------------------------------------------------------------
 VERSION=1.0
+userAGENT="Mozilla/5.0 (wsp1d3r; U; Fastest Crawler On Earth // Commandore64 1.0; de; rv:0 - github.com/wuseman/wspider)"
 
 #### Author of emagnet will be printed if --author or -a is being used
 wspider_author() {
@@ -93,30 +94,36 @@ requirements() {
 }
 
 wspider_usage() {
-    wspider_banner
-    cat << EOF
+cat << EOF
 
+    Usage: $basename$0 -u <url> [options]
 
-Usage: $basename$0 -u <url> [options]
-
-  -a|      - Print author info of this tool
-  -h|      - Print this useful help
-  -i|      - Print current IPv4 address
-  -p|      - Path to store content
-  -t|      - Threads (Default: as many cores your cpu has)
-  -s|      - Spidering, this wont save any data only fetch urls
-  -u|      - URL for our Website to mirror 
-  -v|      - Print verrsion
-  -V|      - Verbose mode
+        -a      - Print author info of this tool
+        -h      - Print this useful help
+        -i      - Print current IPv4 address
+        -p      - Path to store content
+        -t      - Threads (Default: as many cores your cpu has)
+        -u      - URL for our website to mirror 
+        -v      - Print script verrsion
+        -V      - Set verbose mode ON
+        -U      - Use a random UserAgent
 
 EOF
 exit 0
 }
 
+randomized_userAgent() { 
+if [[ $U = "1" ]]; then
+    ua=$(curl -s https://raw.githubusercontent.com/wuseman/wspider/main/extra/userAgents.txt|sed '1,21d'|shuf -n1;shuf -e ${ua})
+else
+    ua=$userAGENT
+fi
+}
+
 if [[ -z $1 ]];then wspider_usage;exit; fi
 
 
-while getopts ":u:p:t:ahivVs" opt; do
+while getopts ":u:p:t:ahivVsU" opt; do
     case $opt in
         a) 
             wspider_author
@@ -150,6 +157,9 @@ while getopts ":u:p:t:ahivVs" opt; do
         s)
             s=1
             ;;
+        U)
+            U=1
+            ;;
         # *)
             #   echo "invalid command: no parameter included with argument $OPTARG"
             #  ;;
@@ -171,21 +181,14 @@ while getopts ":u:p:t:ahivVs" opt; do
 
 
     wspider_banner
-
+    randomized_userAgent
     i="$(curl -sL ifconfig.co)"
-    ua=$(curl -s https://raw.githubusercontent.com/wuseman/wspider/main/extra/userAgents.txt|sed '1,21d'|shuf -n1;shuf -e ${ua})
-    #ua="Mozilla/5.0 (wsp1d3r; U; Fastest Crawler On Earth // Commandore64 1.0; de; rv:0)"
     printf "\e[7m%-`tput cols`s\e[0m\n" "wspider v1.0"
     echo -e "............................: ${u}\rWebsite"
     echo -e "............................: ${p}\rPath "
     echo -e "............................: ${i}\rIPv4: "
     echo -e "............................: ${ua}\rUserAgent: "
     echo -e "............................: ${t} of $(xargs --show-limits -s 1 2>&1|grep -i "parallelism"|awk '{print $8}')\rDownload Threads: "
-    if [[ $s = "1" ]]; then
-        echo -e "............................: Enable\rSpidering Mode: "
-    else
-        echo -e "............................: Disable\rSpidering Mode: "
-    fi 
     printf "\e[7m%-`tput cols`s\e[0m\n" "Press Enter To Continue"
     read;echo -e "\nMirroring: ${u}..."
 
