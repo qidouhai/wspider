@@ -8,8 +8,6 @@
 
 This is a newer version of former [wmirror](https://github.com/wuseman/wmirror) wich now is archived and I will spend alot more time on wspider and it will be ALOT more powerful, wmirror was using single thread with old wget during download and **wspider** is downloading how many files you want. wspider extremely small and fast and I will do my best for add support for authentications asap so you can crawl sites you've logged in to.
 
-Like I said, it is probably one of the fastest crawler/spider tool around that is minimal and just require wget2 and coreutils! 
-
 wspider is **EXTREMLY** powerful and fast and is using wget2 and In many cases wget2 downloads much faster than wget1.x due to HTTP2, HTTP compression, parallel connections and use of If-Modified-Since HTTP header.
 
 <p align="center">
