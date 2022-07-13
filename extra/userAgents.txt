@@ -9,11 +9,11 @@
 -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 Chose a random agent
 
-	curl -s https://www.nr1.nu/archive/useragents/user_agents.txt|shuf -n1 
+	curl -s https://raw.githubusercontent.com/wuseman/wspider/main/extra/userAgents.txt|shuf -n1 
 
 In your script: 
 
-	useragent="$(curl -s https://www.nr1.nu/archive/useragents/user_agents.txt|shuf -n1)"
+	useragent="$(curl -s https://raw.githubusercontent.com/wuseman/wspider/main/extra/userAgents.txt|shuf -n1)"
 	shuf -e "${useragent}"
 
 -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
