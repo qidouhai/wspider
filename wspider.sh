@@ -104,7 +104,6 @@ cat << EOF
         -p      - Path where all other directories will be saved to
         -t      - Specifies the download threads for a resource.  (Default: as many cores your cpu has)
         -u      - URL for our website to mirror 
-        -r      - Specifies  the  maximum number of redirections to follow for a resource. (Default: 20)
         -v      - Print wspider verrsion
         -V      - Set verbose mode ON
         -U      - Use a random UserAgent
@@ -155,10 +154,6 @@ while getopts ":u:p:t:r:ahivVsU" opt; do
         t)
             t=$OPTARG
             ;;
-        r)
-            r=$OPTARG
-            [[ -z $OPTARG ]] && export r=20 || r=$OPTARG
-            ;;
         s)
             s=1
             ;;
@@ -171,7 +166,6 @@ while getopts ":u:p:t:r:ahivVsU" opt; do
         esac
     done
 
-
     if  [[ -z "${u}" ]]; then 
         echo -e "$basename$0: internal error -- url is missing";
         exit 1;
@@ -182,8 +176,8 @@ while getopts ":u:p:t:r:ahivVsU" opt; do
         exit 1;
     fi
 
-    if [[ -z ${t} ]]; then t=$(grep  -c ^processor /proc/cpuinfo);else t=${t};fi
 
+    if [[ -z ${t} ]]; then t=$(grep  -c ^processor /proc/cpuinfo);else t=${t};fi
 
     wspider_banner
     randomized_userAgent
@@ -193,7 +187,6 @@ while getopts ":u:p:t:r:ahivVsU" opt; do
     echo -e "............................: ${p}\rPath "
     echo -e "............................: ${i}\rIPv4: "
     echo -e "............................: ${ua}\rUserAgent: "
-    echo -e "............................: ${r}\rRedirections: "
     echo -e "............................: ${t} of $(xargs --show-limits -s 1 2>&1|grep -i "parallelism"|awk '{print $8}')\rDownload Threads: "
     printf "\e[7m%-`tput cols`s\e[0m\n" "Press Enter To Continue"
     read;echo -e "\nMirroring: ${u}..."
@@ -214,7 +207,7 @@ wget2 --max-threads ${t} \
     --force-atom \
     --force-rss \
     --force-metalink \
-    --max-redirect=${r} \
+    --max-redirect=${t} \
     --convert-links \
     --robots=off \
     -P ${p} ${u}
