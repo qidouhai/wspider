@@ -180,7 +180,7 @@ while getopts ":u:p:t:ahivVs" opt; do
     echo -e "............................: ${p}\rPath "
     echo -e "............................: ${i}\rIPv4: "
     echo -e "............................: ${ua}\rUserAgent: "
-    echo -e "............................: ${t}\rDownload Threads: "
+    echo -e "............................: ${t} of $(xargs --show-limits -s 1 2>&1|grep -i "parallelism"|awk '{print $8}')\rDownload Threads: "
     if [[ $s = "1" ]]; then
         echo -e "............................: Enable\rSpidering Mode: "
     else
