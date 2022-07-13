@@ -57,7 +57,7 @@ Crawler is from here: https://www.gnu.org/software/parallel/man.html
 
 ### System requirements
 
-- wget2     - Find more info about _wget2_ [here](https://gnuwget.gitlab.io/wget2)
+- wget2     - Find more info about _wget2_ [here](https://gitlab.com/gnuwget/wget2)
 
 ### Changelog
 
