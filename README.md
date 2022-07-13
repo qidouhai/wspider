@@ -8,13 +8,15 @@ This is a newer version of former [wmirror](https://github.com/wuseman/wmirror) 
 wspider is **EXTREMLY** powerful and fast and is using wget2 and In many cases wget2 downloads much faster than wget1.x due to HTTP2, HTTP compression, parallel connections and use of If-Modified-Since HTTP header.
 
 <p align="center">
-<b>Be careful and use wspider on your own risk, maybe its to fast4u!</b><br><br>
+<b>Be careful and use wspider on your own risk, maybe its 2fast4u!</b><br><br>
 <b>Happy crawling! ; )</b>
 </p>
 
 | Version            |  Released      | Description                          |
 | :----------------- | :------------- | :---------------------------------- | 
 | `1.0`              |  2022-07-02    | Clone/Crawl/Mirror/Spidering any website extremely fast with how many threads you want   | 
+
+* Open previews in fullscreen for a proper view
 
 ### wspider (250 threads)
 
