@@ -98,13 +98,14 @@ cat << EOF
 
     Usage: $basename$0 -u <url> [options]
 
-        -a      - Print author info of this tool
+        -a      - Print author info 
         -h      - Print this useful help
         -i      - Print current IPv4 address
-        -p      - Path to store content
-        -t      - Threads (Default: as many cores your cpu has)
+        -p      - Path where all other directories will be saved to
+        -t      - Specifies the download threads for a resource.  (Default: as many cores your cpu has)
         -u      - URL for our website to mirror 
-        -v      - Print script verrsion
+        -r      - Specifies  the  maximum number of redirections to follow for a resource. (Default: 20)
+        -v      - Print wspider verrsion
         -V      - Set verbose mode ON
         -U      - Use a random UserAgent
 
@@ -123,7 +124,7 @@ fi
 if [[ -z $1 ]];then wspider_usage;exit; fi
 
 
-while getopts ":u:p:t:ahivVsU" opt; do
+while getopts ":u:p:t:r:ahivVsU" opt; do
     case $opt in
         a) 
             wspider_author
@@ -153,6 +154,10 @@ while getopts ":u:p:t:ahivVsU" opt; do
             ;;
         t)
             t=$OPTARG
+            ;;
+        r)
+            r=$OPTARG
+            [[ -z $OPTARG ]] && export r=20 || r=$OPTARG
             ;;
         s)
             s=1
@@ -188,6 +193,7 @@ while getopts ":u:p:t:ahivVsU" opt; do
     echo -e "............................: ${p}\rPath "
     echo -e "............................: ${i}\rIPv4: "
     echo -e "............................: ${ua}\rUserAgent: "
+    echo -e "............................: ${r}\rRedirections: "
     echo -e "............................: ${t} of $(xargs --show-limits -s 1 2>&1|grep -i "parallelism"|awk '{print $8}')\rDownload Threads: "
     printf "\e[7m%-`tput cols`s\e[0m\n" "Press Enter To Continue"
     read;echo -e "\nMirroring: ${u}..."
