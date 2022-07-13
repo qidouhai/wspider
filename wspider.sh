@@ -173,7 +173,7 @@ while getopts ":u:p:t:ahivVs" opt; do
     wspider_banner
 
     i="$(curl -sL ifconfig.co)"
-    ua=$(curl -s https://www.nr1.nu/archive/useragents/user_agents.txt |sed '1,21d'|shuf -n1;shuf -e ${ua})
+    ua=$(curl -s https://raw.githubusercontent.com/wuseman/wspider/main/extra/userAgents.txt|sed '1,21d'|shuf -n1;shuf -e ${ua})
     #ua="Mozilla/5.0 (wsp1d3r; U; Fastest Crawler On Earth // Commandore64 1.0; de; rv:0)"
     printf "\e[7m%-`tput cols`s\e[0m\n" "wspider v1.0"
     echo -e "............................: ${u}\rWebsite"
