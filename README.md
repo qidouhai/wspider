@@ -1,10 +1,7 @@
-# wspider 
-
 <p align="center">
   <h1 align="center"># wspider (v1.0)</h1>
   <h3 align="center">Probably one of the fastest crawler <i>you've</i> ever seen</h3>
 </p>
-
 
 This is a newer version of former [wmirror](https://github.com/wuseman/wmirror) wich now is archived and I will spend alot more time on wspider and it will be ALOT more powerful, wmirror was using single thread with old wget during download and **wspider** is downloading how many files you want. wspider extremely small and fast and I will do my best for add support for authentications asap so you can crawl sites you've logged in to.
 
