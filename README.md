@@ -1,7 +1,14 @@
 <p align="center">
   <h1 align="center"># wspider (v1.0)</h1>
   <h3 align="center">Probably one of the fastest crawler <i>you've</i> ever seen</h3>
+
+
+![w](https://img.shields.io/badge/wuseman-%40Nr1-ff69b4)[![wakatime](https://wakatime.com/badge/user/7c0c8150-9f8e-402d-a34f-2539fea9f88e/project/8e3282b8-ff0d-4680-a385-7b7cc66954bf.svg)](https://wakatime.com/badge/user/7c0c8150-9f8e-402d-a34f-2539fea9f88e/project/8e3282b8-ff0d-4680-a385-7b7cc66954bf) ![wakatime](https://img.shields.io/github/last-commit/wuseman/wspider?color=purple&label=wspider%20last%20commit&logo=wspider) ![1](https://img.shields.io/github/contributors/wuseman/wspider?color=lightgreen&label=wspider%20contributors) ![1](https://img.shields.io/github/languages/code-size/wuseman/wspider?label=wspider%20size) ![2](https://img.shields.io/github/issues-raw/wuseman/wspider?color=red&label=wspider%20issues&logo=wspider&logoColor=red)
+
 </p>
+
+
+
 
 This is a newer version of former [wmirror](https://github.com/wuseman/wmirror) wich now is archived and I will spend alot more time on wspider and it will be ALOT more powerful, wmirror was using single thread with old wget during download and **wspider** is downloading how many files you want. wspider extremely small and fast and I will do my best for add support for authentications asap so you can crawl sites you've logged in to.
 
