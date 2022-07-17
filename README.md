@@ -61,6 +61,43 @@ Crawler is from here: https://www.gnu.org/software/parallel/man.html
      chmod +x wspider.sh
      ./wpider.sh -u <url> -p <path> -t <threads>
 
+
+### Example, crawl while logged in:
+
+```sh
+wget2 --max-threads 250 \
+    --mirror \
+    --recursive \
+    --level inf \
+    --progress=bar \
+    --force-html \
+    --force-css \
+    --force-sitemap \
+    --force-atom \
+    --force-rss \
+    --force-metalink \
+    --max-redirect=250 \
+    --convert-links \
+    --robots=off <HTTPS://SITETOCRAWL> \
+  --header 'authority: nohide.space' \
+  --header 'accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9' \
+  --header 'accept-language: sv-SE,sv;q=0.9,en-US;q=0.8,en;q=0.7' \
+  --header 'cache-control: max-age=0' \
+  --header 'content-type: application/x-www-form-urlencoded' \
+  --header 'cookie: cf_chl_2=9ff9dda1bfb1adc; cf_chl_prog=x14; cf_clearance=Alfd7kcY1L5KOTx2uI5Stu8X7SRWc96O3zPy6B84gAY-1658091341-0-150; xf_csrf=C9CsA8IsEEy3FTS6; _ga=GA1.2.2033614628.1658091287; _gid=GA1.2.859525534.1658091287' \
+  --header 'referer:  <HTTPS://SITETOCRAWL>' \
+  --header 'sec-ch-ua: ".Not/A)Brand";v="99", "Google Chrome";v="103", "Chromium";v="103"' \
+  --header 'sec-ch-ua-mobile: ?0' \
+  --header 'sec-ch-ua-platform: "Linux"' \
+  --header 'sec-fetch-dest: document' \
+  --header 'sec-fetch-mode: navigate' \
+  --header 'sec-fetch-site: same-origin' \
+  --header 'sec-fetch-user: ?1' \
+  --header 'upgrade-insecure-requests: 1' \
+  --header 'user-agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.0.0 Safari/537.36' \
+  --header 'login=wuseman&password=<passsword> 
+```
+
 ### System requirements
 
 - wget2     - Find more info about _wget2_ [here](https://gitlab.com/gnuwget/wget2)
