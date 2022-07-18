@@ -49,7 +49,7 @@ Crawler is from here: https://www.gnu.org/software/parallel/man.html
 
 - [ ] Add support for darknet
 - [ ] Add support for pastebin similiar sites
-- [ ] Fix so we can crawl all subdomains
+- [x] Fix so we can crawl all subdomains
 - [ ] Add support for some filetypes only 
 - [ ] Add support for socks5 proxy servers from the public
 
@@ -60,43 +60,6 @@ Crawler is from here: https://www.gnu.org/software/parallel/man.html
      cd wspider
      chmod +x wspider.sh
      ./wpider.sh -u <url> -p <path> -t <threads>
-
-
-### Example, crawl while logged in with wget2
-
-```sh
-wget2 --max-threads 250 \
-    --mirror \
-    --recursive \
-    --level inf \
-    --progress=bar \
-    --force-html \
-    --force-css \
-    --force-sitemap \
-    --force-atom \
-    --force-rss \
-    --force-metalink \
-    --max-redirect=250 \
-    --convert-links \
-    --robots=off <HTTPS://SITETOCRAWL> \
-    --header 'authority: <DNS>' \
-    --header 'accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9' \
-    --header 'accept-language: sv-SE,sv;q=0.9,en-US;q=0.8,en;q=0.7' \
-    --header 'cache-control: max-age=0' \
-    --header 'content-type: application/x-www-form-urlencoded' \
-    --header 'cookie: cf_chl_2=9ff9dda1bfb1adc; cf_chl_prog=x14; cf_clearance=Alfd7kcY1L5KOTx2uI5Stu8X7SRWc96O3zPy6B84gAY-1658091341-0-150; xf_csrf=C9CsA8IsEEy3FTS6; _ga=GA1.2.2033614628.1658091287; _gid=GA1.2.859525534.1658091287' \
-    --header 'referer:  <HTTPS://SITETOCRAWL>' \
-    --header 'sec-ch-ua: ".Not/A)Brand";v="99", "Google Chrome";v="103", "Chromium";v="103"' \
-    --header 'sec-ch-ua-mobile: ?0' \
-    --header 'sec-ch-ua-platform: "Linux"' \
-    --header 'sec-fetch-dest: document' \
-    --header 'sec-fetch-mode: navigate' \
-    --header 'sec-fetch-site: same-origin' \
-    --header 'sec-fetch-user: ?1' \
-    --header 'upgrade-insecure-requests: 1' \
-    --header 'user-agent: Mozilla/5.0 (X11; Linux x86_64) ThisACcountWasHackedDontBlameTheOwnerOfAccount_Newbi3' \
-    --header 'login=wuseman&password=<passsword> 
-```
 
 ### System requirements
 
