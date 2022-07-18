@@ -42,7 +42,9 @@
 #
 # - End of Header -------------------------------------------------------------
 VERSION=1.0
-userAGENT="Mozilla/5.0 (wsp1d3r; U; Fastest Crawler On Earth // Commandore64 1.0; de; rv:0 - github.com/wuseman/wspider)"
+
+sSOURCE="https://crt.sh/?q"
+
 
 #### Author of emagnet will be printed if --author or -a is being used
 wspider_author() {
@@ -64,6 +66,15 @@ under GNU LESSER GENERAL PUBLIC LICENSE GPLv3
 
 EOF
 }
+
+okMSG() {
+    echo -e "[\e[1;32m*\e[0m] $*"
+}
+
+errMSG() {
+    echo -e "[\e[1;31m*\e[0m] $*"
+}
+
 
 wspider_banner() {
     cat << "EOF"
@@ -102,6 +113,7 @@ cat << EOF
         -h      - Print this useful help
         -i      - Print current IPv4 address
         -p      - Path where all other directories will be saved to
+        -s      - Include subdomains, mirror all subdomains of host (will take long time)
         -t      - Specifies the download threads for a resource.  (Default: as many cores your cpu has)
         -u      - URL for our website to mirror 
         -v      - Print wspider verrsion
@@ -120,10 +132,27 @@ else
 fi
 }
 
+subdomains() {
+curl -sL ${sSOURCE}=$u \
+    |grep -i $u \
+    |awk -F[\<\>] '{print $3}' \
+    |awk '!seen[$0]++' \
+    |sort \
+    |grep $u|grep -v crt.sh > hosts.txt
+
+seq 1 50|parallel -j50 -a hosts.txt 'ping -c 1 {} >/dev/null \
+    && echo -e "{} \r ................................................. [....\e[1;32mup\e[0m]\rHost: https://{} " \
+    || echo -e "{} \r ................................................. [....\e[1;31mdn\e[0m]\rHost: https://{} "' 2>/dev/null|awk 'length < 140' |tee status.txt
+
+#printf '%59s\n' |tr ' ' '-'
+#printf "\e[7m%-`tput cols`s\e[0m\n" "Found: $(cat hosts.txt|wc -l) subdomains for ${u}, $(cat mirror.txt|wc -l) will be mirrored"
+#printf '%59s\n' |tr ' ' '-'
+}
+
 if [[ -z $1 ]];then wspider_usage;exit; fi
 
 
-while getopts ":u:p:t:r:ahivVsU" opt; do
+while getopts ":u:p:t:r:ahivVsUs" opt; do
     case $opt in
         a) 
             wspider_author
@@ -177,25 +206,22 @@ while getopts ":u:p:t:r:ahivVsU" opt; do
     fi
 
 
-    if [[ -z ${t} ]]; then t=$(grep  -c ^processor /proc/cpuinfo);else t=${t};fi
-
-    wspider_banner
-    randomized_userAgent
-    i="$(curl -sL ifconfig.co)"
-    printf "\e[7m%-`tput cols`s\e[0m\n" "wspider v1.0"
-    echo -e "............................: ${u}\rWebsite"
-    echo -e "............................: ${p}\rPath "
-    echo -e "............................: ${i}\rIPv4: "
-    echo -e "............................: ${ua}\rUserAgent: "
-    echo -e "............................: ${t} of $(xargs --show-limits -s 1 2>&1|grep -i "parallelism"|awk '{print $8}')\rDownload Threads: "
-    printf "\e[7m%-`tput cols`s\e[0m\n" "Press Enter To Continue"
-    read;echo -e "\nMirroring: ${u}..."
-
-#wget2 --max-threads ${t} --user-agent "$ua" -c --progress=bar -l inf -m -e robots=off -P ${p} ${u}
-
-
+if [[ -z ${t} ]]; then t=$(grep  -c ^processor /proc/cpuinfo);else t=${t};fi
+wspider_banner
+randomized_userAgent
+i="$(curl -sL ifconfig.co)"
+printf "\e[7m%-`tput cols`s\e[0m\n" "wspider v1.0"
+if [[ $s -ne "1" ]]; then
+echo -e "............................: ${u}\rWebsite"
+echo -e "............................: ${p}\rPath "
+echo -e "............................: ${i}\rIPv4: "
+echo -e "............................: \e[1;31mOFF\e[0m\rSubdomains: "
+echo -e "............................: ${ua}\rUserAgent: "
+echo -e "............................: ${t} of $(xargs --show-limits -s 1 2>&1|grep -i "parallelism"|awk '{print $8}')\rDownload Threads: "
+printf "\e[7m%-`tput cols`s\e[0m\n" "Press Enter To Continue"
+read;echo -e "\nMirroring: ${u}..."
 wget2 --max-threads ${t} \
-    --user-agent ${ua} \
+    --user-agent "${ua}" \
     --mirror \
     --recursive \
     --level inf \
@@ -210,4 +236,25 @@ wget2 --max-threads ${t} \
     --max-redirect=${t} \
     --convert-links \
     --robots=off \
+    -i mirror.txt \
     -P ${p} ${u}
+else
+echo -e ".................................................: ${u}\rWebsite"
+echo -e ".................................................: ${p}\rPath "
+echo -e ".................................................: ${i}\rIPv4: "
+echo -e ".................................................: \e[1;32mON\e[0m\rSubdomains: "
+echo -e ".................................................: ${ua}\rUserAgent: "
+echo -e ".................................................: ${t} of $(xargs --show-limits -s 1 2>&1|grep -i "parallelism"|awk '{print $8}')\rDownload Threads: "
+printf "\e[7m%-`tput cols`s\e[0m\n" "Press Enter To Continue"
+read 
+subdomains
+cat status.txt|grep "up"|grep -Eo "(http|https)://[a-zA-Z0-9./?=_-].*"> mirror.txt
+wget2 --max-threads ${t} \
+      --user-agent "${ua}" \
+      --mirror \
+      --recursive \
+      --level inf \
+      --progress=bar \
+      --robots=off \
+       -i mirror.txt 
+fi
