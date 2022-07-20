@@ -6,7 +6,7 @@
 #       Version: 1.0
 #
 #       Created: 2022-07-03 (15:35:50)
-#      Modified: 2022-07-13 (21:25:27)
+#      Modified: 2022-07-20 (15:16:16)
 #
 #           iRC: wuseman (Libera/EFnet/LinkNet) 
 #       Website: https://www.nr1.nu/
@@ -105,7 +105,7 @@ requirements() {
 }
 
 wspider_usage() {
-cat << EOF
+    cat << EOF
 
     Usage: $basename$0 -u <url> [options]
 
@@ -125,30 +125,32 @@ exit 0
 }
 
 randomized_userAgent() { 
-if [[ $U = "1" ]]; then
-    ua=$(curl -s https://raw.githubusercontent.com/wuseman/wspider/main/extra/userAgents.txt|sed '1,21d'|shuf -n1;shuf -e ${ua})
-else
-    ua=$userAGENT
-fi
+    if [[ $U = "1" ]]; then
+        ua=$(curl -s https://raw.githubusercontent.com/wuseman/wspider/main/extra/userAgents.txt|sed '1,21d'|shuf -n1;shuf -e ${ua})
+    else
+        ua=$userAGENT
+    fi
 }
 
 subdomains() {
-curl -sL ${sSOURCE}=$u \
-    |grep -i $u \
-    |awk -F[\<\>] '{print $3}' \
-    |awk '!seen[$0]++' \
-    |sort \
-    |grep $u|grep -v crt.sh > hosts.txt
+    curl -sL ${sSOURCE}=$u \
+        |grep -i $u \
+        |awk -F[\<\>] '{print $3}' \
+        |awk '!seen[$0]++' \
+        |sort \
+        |grep $u|grep -v crt.sh > hosts.txt
 
-seq 1 50|parallel -j50 -a hosts.txt 'ping -c 1 {} >/dev/null \
-    && echo -e "{} \r ................................................. [....\e[1;32mup\e[0m]\rHost: https://{} " \
-    || echo -e "{} \r ................................................. [....\e[1;31mdn\e[0m]\rHost: https://{} "' 2>/dev/null|awk 'length < 140' |tee status.txt
+    seq 1 50|parallel -j50 -a hosts.txt 'ping -c 1 {} >/dev/null \
+        && echo -e "{} \r ................................................. [....\e[1;32mup\e[0m]\rHost: https://{} " \
+        || echo -e "{} \r ................................................. [....\e[1;31mdn\e[0m]\rHost: https://{} "' 2>/dev/null|awk 'length < 140' |tee status.txt
 
 #printf '%59s\n' |tr ' ' '-'
 #printf "\e[7m%-`tput cols`s\e[0m\n" "Found: $(cat hosts.txt|wc -l) subdomains for ${u}, $(cat mirror.txt|wc -l) will be mirrored"
 #printf '%59s\n' |tr ' ' '-'
 }
 
+
+requirements
 if [[ -z $1 ]];then wspider_usage;exit; fi
 
 
@@ -205,56 +207,57 @@ while getopts ":u:p:t:r:ahivVsUs" opt; do
         exit 1;
     fi
 
-
-if [[ -z ${t} ]]; then t=$(grep  -c ^processor /proc/cpuinfo);else t=${t};fi
-wspider_banner
-randomized_userAgent
-i="$(curl -sL ifconfig.co)"
-printf "\e[7m%-`tput cols`s\e[0m\n" "wspider v1.0"
-if [[ $s -ne "1" ]]; then
-echo -e "............................: ${u}\rWebsite"
-echo -e "............................: ${p}\rPath "
-echo -e "............................: ${i}\rIPv4: "
-echo -e "............................: \e[1;31mOFF\e[0m\rSubdomains: "
-echo -e "............................: ${ua}\rUserAgent: "
-echo -e "............................: ${t} of $(xargs --show-limits -s 1 2>&1|grep -i "parallelism"|awk '{print $8}')\rDownload Threads: "
-printf "\e[7m%-`tput cols`s\e[0m\n" "Press Enter To Continue"
-read;echo -e "\nMirroring: ${u}..."
-wget2 --max-threads ${t} \
-    --user-agent "${ua}" \
-    --mirror \
-    --recursive \
-    --level inf \
-    --progress=bar \
-    --base=${u} \
-    --force-html \
-    --force-css \
-    --force-sitemap \
-    --force-atom \
-    --force-rss \
-    --force-metalink \
-    --max-redirect=${t} \
-    --convert-links \
-    --robots=off \
-    -i mirror.txt \
-    -P ${p} ${u}
-else
-echo -e ".................................................: ${u}\rWebsite"
-echo -e ".................................................: ${p}\rPath "
-echo -e ".................................................: ${i}\rIPv4: "
-echo -e ".................................................: \e[1;32mON\e[0m\rSubdomains: "
-echo -e ".................................................: ${ua}\rUserAgent: "
-echo -e ".................................................: ${t} of $(xargs --show-limits -s 1 2>&1|grep -i "parallelism"|awk '{print $8}')\rDownload Threads: "
-printf "\e[7m%-`tput cols`s\e[0m\n" "Press Enter To Continue"
-read 
-subdomains
-cat status.txt|grep "up"|grep -Eo "(http|https)://[a-zA-Z0-9./?=_-].*"> mirror.txt
-wget2 --max-threads ${t} \
-      --user-agent "${ua}" \
-      --mirror \
-      --recursive \
-      --level inf \
-      --progress=bar \
-      --robots=off \
-       -i mirror.txt 
-fi
+    s=$(echo "$s"| sed 's/https:\/\/www.//;s/www.//g')
+    if [[ -z ${t} ]]; then t=$(grep  -c ^processor /proc/cpuinfo);else t=${t};fi
+    wspider_banner
+    randomized_userAgent
+    i="$(curl -sL ifconfig.co)"
+    printf "\e[7m%-`tput cols`s\e[0m\n" "wspider v1.0"
+    if [[ $s -ne "1" ]]; then
+        echo -e "............................: ${u}\rWebsite"
+        echo -e "............................: ${p}\rPath "
+        echo -e "............................: ${i}\rIPv4: "
+        echo -e "............................: \e[1;31mOFF\e[0m\rSubdomains: "
+        echo -e "............................: ${ua}\rUserAgent: "
+        echo -e "............................: ${t} of $(xargs --show-limits -s 1 2>&1|grep -i "parallelism"|awk '{print $8}')\rDownload Threads: "
+        printf "\e[7m%-`tput cols`s\e[0m\n" "Press Enter To Continue"
+        read;echo -e "\nMirroring: ${u}..."
+        wget2 --max-threads ${t} \
+            --user-agent "${ua}" \
+            --mirror \
+            --recursive \
+            --level inf \
+            --progress=bar \
+            --base=${u} \
+            --force-html \
+            --force-css \
+            --force-sitemap \
+            --force-atom \
+            --force-rss \
+            --force-metalink \
+            --max-redirect=${t} \
+            --convert-links \
+            --robots=off \
+            -i mirror.txt \
+            -P ${p} ${u}
+                else
+                    echo -e ".................................................: ${u}\rWebsite"
+                    echo -e ".................................................: ${p}\rPath "
+                    echo -e ".................................................: ${i}\rIPv4: "
+                    echo -e ".................................................: \e[1;32mON\e[0m\rSubdomains: "
+                    echo -e ".................................................: ${ua}\rUserAgent: "
+                    echo -e ".................................................: ${t} of $(xargs --show-limits -s 1 2>&1|grep -i "parallelism"|awk '{print $8}')\rDownload Threads: "
+                    printf "\e[7m%-`tput cols`s\e[0m\n" "Press Enter To Continue"
+                    read 
+                    subdomains
+                    cat status.txt|grep "up"|grep -Eo "(http|https)://[a-zA-Z0-9./?=_-].*" |cut -d'/' -f3 > mirror.txt
+                    wget2 --max-threads ${t} \
+                        --user-agent "${ua}" \
+                        --mirror \
+                        --recursive \
+                        --level inf \
+                        --progress=bar \
+                        --robots=off \
+                        -i mirror.txt 
+    fi
+    #rm mirror.txt status.txt hosts.txt
